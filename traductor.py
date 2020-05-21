@@ -245,5 +245,5 @@ while otra_vez:
     if mas_traduccion == 'no':
         otra_vez = False
 m = input("Presiona una tecla para salir")
-print('hello')
+
 
