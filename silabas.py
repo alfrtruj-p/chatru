@@ -17,10 +17,8 @@ def silabas(palabra):
             if consonante(palabra[letra]):
                 if guegui(palabra[letra + salto:]):  # esto es una chapu, pero no tengo otra forma por ahora :(
                     salto += 2
-                    print('guegui')
                 elif ataque_complejo(palabra[letra:letra + 2]):
                     salto += 2
-                    print('ataque')
                 else:
                     salto += 1
 
@@ -29,16 +27,12 @@ def silabas(palabra):
 
             if triptongo(palabra[letra + salto:]):
                 salto += 3
-                print('Triptongo')
             elif diptongo_con_h(palabra[letra + salto:]):
                 salto += 3
-                print('diptongo con h')
             elif diptongo(palabra[letra + salto:]):
                 salto += 2
-                print('diptongo')
             elif dieresis(palabra[letra + salto:]):
                 salto += 2
-                print('dieresis')
             else:
                 salto += 1
 
