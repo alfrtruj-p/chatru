@@ -1,60 +1,62 @@
 # http://elies.rediris.es/elies4/Fon2.htm
+# http://liceu.uab.es/~joaquim/general_linguistics/gen_ling/fonologia/silaba/silaba.html
 
 
 def silabas(palabra):
-    silabas = []
+    silabas_en_la_palabra = []
     letra = 0
-    salto = 0
 
     palabra = minusculas(palabra)
 
     while True:
         try:
-            if letra >= len(palabra): break
-            silaba = ""
+            if letra >= len(palabra):
+                break
             salto = 0
 
             if consonante(palabra[letra]):
                 if guegui(palabra[letra + salto:]):  # esto es una chapu, pero no tengo otra forma por ahora :(
                     salto += 2
+                    print('guegui')
                 elif ataque_complejo(palabra[letra:letra + 2]):
                     salto += 2
+                    print('ataque')
                 else:
                     salto += 1
+
             else:
                 salto += 0  # vocal
 
             if triptongo(palabra[letra + salto:]):
                 salto += 3
+                print('Triptongo')
             elif diptongo_con_h(palabra[letra + salto:]):
                 salto += 3
+                print('diptongo con h')
             elif diptongo(palabra[letra + salto:]):
                 salto += 2
+                print('diptongo')
             elif dieresis(palabra[letra + salto:]):
                 salto += 2
+                print('dieresis')
             else:
                 salto += 1
 
-            # if coda_compleja(palabra[letra+salto:]):
-            #	salto += 2
-            # elif coda_simple(palabra[letra+salto:]):
-            #	salto += 1
             salto += coda(palabra[letra + salto:])
 
             silaba = palabra[letra:letra + salto]
             letra += salto
 
-            silabas.append(silaba)
-        # print silabas, silaba, letra, salto, "--"
-        # time.sleep(2)
+            silabas_en_la_palabra.append(silaba)
+
         except IndexError:
             break
 
-    return silabas
+    return silabas_en_la_palabra
 
 
 def vocal(letra):
-    return True if letra in [u'a', u'e', u'i', u'o', u'u', u'á', u'é', u'í', u'ó', u'ú', u'ü'] else False
+    return True if letra in ['a', 'e', 'i', 'o', 'u', 'á', 'é', 'í', 'ó', 'ú', 'ü'] else False
 
 
 def consonante(letra):
@@ -63,37 +65,37 @@ def consonante(letra):
 
 def ataque_complejo(c):
     if len(c) < 2: return False
-    return True if (c[0] in [u'b', u'c', u'f', u'g', u'p', u't'] and c[1] in [u'l', u'r'] and c != u"dl") or c in [
-        u'dr', u'kr', u'll', u'rr', u'ch'] else False
+    return True if (c[0] in ['b', 'c', 'f', 'g', 'p', 't'] and c[1] in ['l', 'r'] and c != "dl") or c in [
+        'dr', 'kr', 'll', 'rr', 'ch'] else False
 
 
 def guegui(c):
     if len(c) < 3: return False
-    return True if (c[0:1] == u'g' and c[1] == u'u' and c[2] in [u'e', u'i']) else False
+    return True if (c[0:1] == 'g' and c[1] == 'u' and c[2] in ['e', 'i']) else False
 
 
 def diptongo(trozo):
     if len(trozo) < 2: return False
-    if trozo[0:2] in [u'ai', u'au', u'ei', u'eu', u'io', u'ou', u'ia', u'ua', u'ie', u'ue', u'oi', u'uo', u'ui',
-                      u'iu']: return True
-    if len(trozo) == 2 and trozo in [u'ay', u'ey', u'oy']: return True
+    if trozo[0:2] in ['ai', 'au', 'ei', 'eu', 'io', 'ou', 'ia', 'ua', 'ie', 'ue', 'oi', 'uo', 'ui',
+                      'iu']: return True
+    if len(trozo) == 2 and trozo in ['ay', 'ey', 'oy']: return True
     return False
 
 
 def dieresis(trozo):
     if len(trozo) < 2: return False
-    return True if trozo[0:2] in [u'üe', u'üi'] else False
+    return True if trozo[0:2] in ['üe', 'üi'] else False
 
 
 def diptongo_con_h(trozo):
     if len(trozo) < 3: return False
     t = trozo[0:3]
 
-    if t[1] == u'h':
-        if len(trozo) > 3 and trozo[2:4] == u'ue':
+    if t[1] == 'h':
+        if len(trozo) > 3 and trozo[2:4] == 'ue':
             return False
         else:
-            t = t.replace(u'h', u'')
+            t = t.replace('h', '')
     else:
         return False
 
@@ -102,8 +104,8 @@ def diptongo_con_h(trozo):
 
 def triptongo(trozo):
     if len(trozo) < 3: return False
-    return True if trozo[0:3] in [u'iai', u'iei', u'uai', u'uei', u'uau', u'iau', u'iái', u'iéi', u'uái', u'uéi',
-                                  u'uáu', u'iáu', u'uay', u'uey'] and len(trozo[3:]) < 2 else False
+    return True if trozo[0:3] in ['iai', 'iei', 'uai', 'uei', 'uau', 'iau', 'iái', 'iéi', 'uái', 'uéi',
+                                  'uáu', 'iáu', 'uay', 'uey'] and len(trozo[3:]) < 2 else False
 
 
 def coda(trozo):
@@ -115,19 +117,18 @@ def coda(trozo):
     if l > 2 and consonante(trozo[0]) and consonante(trozo[1]) and vocal(trozo[2]): return 1  # V+C +C+V
     if l > 3 and consonante(trozo[0]) and ataque_complejo(trozo[1:3]) and vocal(trozo[3]): return 1  # V+C +C+C+V
     if l > 3 and consonante(trozo[0]) and consonante(trozo[1]) and consonante(trozo[2]) and vocal(
-        trozo[3]): return 2  # V+C+C +C+V
+            trozo[3]): return 2  # V+C+C +C+V
     if l > 3 and consonante(trozo[0]) and consonante(trozo[1]) and consonante(trozo[2]) and consonante(
-        trozo[3]): return 2  # V+C+C +C+C+V
+            trozo[3]): return 2  # V+C+C +C+C+V
     return 0
 
 
 def minusculas(texto):
     ret = ""
-    mapeo = {u'Á': u'á', u'É': u'é', u'Í': u'í', u'Ó': u'ó', u'Ú': u'ú', u'Ü': u'ü', u'Ñ': u'ñ'}
+    mapeo = {'Á': 'á', 'É': 'é', 'Í': 'í', 'Ó': 'ó', 'Ú': 'ú', 'Ü': 'ü', 'Ñ': 'ñ'}
     for letra in texto:
         if letra in mapeo:
             ret += letra.replace(letra, mapeo[letra])
         else:
             ret += letra.lower()
     return ret
-
